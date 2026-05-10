@@ -2,7 +2,7 @@ package com.example.prueba_tecnica_backend_2;
 
 import java.util.Date;
 
-public class User {
+public class Persona {
     private Date fecha;
     private String cliente;
     private String numeroCuenta;
@@ -12,10 +12,10 @@ public class User {
     private String movimiento;
     private double saldoDisponible;
 
-    public User() {
+    public Persona() {
     }
 
-    public User(Date fecha, String cliente, String numeroCuenta, String tipo, double saldoInicial, String estado, String movimiento, double saldoDisponible) {
+    public Persona(Date fecha, String cliente, String numeroCuenta, String tipo, double saldoInicial, String estado, String movimiento, double saldoDisponible) {
         this.fecha = fecha;
         this.cliente = cliente;
         this.numeroCuenta = numeroCuenta;

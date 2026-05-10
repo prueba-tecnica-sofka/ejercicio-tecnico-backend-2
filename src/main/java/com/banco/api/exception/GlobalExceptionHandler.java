@@ -5,10 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;  
 import org.springframework.validation.FieldError;  
 import org.springframework.web.bind.MethodArgumentNotValidException;  
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;  
 import org.springframework.web.bind.annotation.RestControllerAdvice;  
   
 import java.time.LocalDateTime;  
+import java.util.Arrays;
 import java.util.HashMap;  
 import java.util.Map;  
   
@@ -48,6 +50,16 @@ public class GlobalExceptionHandler {
                 null);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);  
     }  
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateResource(DuplicateResourceException ex) {
+        ErrorResponse error = buildErrorResponse(
+                HttpStatus.CONFLICT,
+                "Conflict",
+                ex.getMessage(),
+                null);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
   
     @ExceptionHandler(MethodArgumentNotValidException.class)  
     public ResponseEntity<ErrorResponse> handleValidationExceptions(  
@@ -66,6 +78,25 @@ public class GlobalExceptionHandler {
                 errors);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);  
     }
+
+        @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+        public ResponseEntity<ErrorResponse> handleMethodNotSupported(
+            HttpRequestMethodNotSupportedException ex) {
+        String allowedMethods = ex.getSupportedMethods() == null
+            ? ""
+            : String.join(", ", Arrays.asList(ex.getSupportedMethods()));
+
+        String message = allowedMethods.isBlank()
+            ? "Metodo HTTP no permitido para este endpoint"
+            : "Metodo HTTP no permitido. Metodos soportados: " + allowedMethods;
+
+        ErrorResponse error = buildErrorResponse(
+            HttpStatus.METHOD_NOT_ALLOWED,
+            "Method Not Allowed",
+            message,
+            null);
+        return new ResponseEntity<>(error, HttpStatus.METHOD_NOT_ALLOWED);
+        }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception ex) {

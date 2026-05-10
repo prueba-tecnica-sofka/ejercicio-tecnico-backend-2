@@ -29,6 +29,8 @@ Desarrollar una API REST para gestión de cuentas bancarias que permita:
 - **ORM:** Spring Data JPA / Hibernate
 - **Build:** Maven
 - **Contenedorización:** Docker + Docker Compose
+- **Testing:** JUnit 5, MockMvc, Mockito
+- **Documentación API:** Postman Collection
 
 ### Principios de Diseño
 - **Clean Architecture** - Separación de responsabilidades
@@ -719,8 +721,6 @@ spring:
 
 server:
   port: 3000
-  servlet:
-    context-path: /api
 
 logging:
   level:
@@ -1239,5 +1239,5 @@ docker-compose down -v
 ---
 
 **Documento generado para proyecto: API REST Sistema Bancario**  
-**Fecha:** 2026  
+**Fecha:** 2024  
 **Stack:** Java Spring Boot + PostgreSQL + Docker

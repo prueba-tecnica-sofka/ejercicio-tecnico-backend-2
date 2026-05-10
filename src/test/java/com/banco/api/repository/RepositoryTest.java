@@ -15,13 +15,16 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
 @Import(RepositoryTest.JpaAuditingTestConfig.class)
 @ContextConfiguration(classes = RepositoryTest.RepositoryJpaTestApplication.class)
 @EntityScan(basePackages = "com.banco.api.entity")
@@ -94,6 +97,7 @@ class RepositoryTest {
     }
 
     @SpringBootConfiguration
+    @Profile("test")
     @EnableAutoConfiguration
     @EnableJpaRepositories(basePackages = "com.banco.api.repository")
     static class RepositoryJpaTestApplication {

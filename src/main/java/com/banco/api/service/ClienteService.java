@@ -3,6 +3,7 @@ package com.banco.api.service;
 import com.banco.api.dto.request.ClienteRequestDTO;  
 import com.banco.api.dto.response.ClienteResponseDTO;  
 import com.banco.api.entity.Cliente;  
+import com.banco.api.exception.DuplicateResourceException;
 import com.banco.api.exception.ResourceNotFoundException;
 import com.banco.api.mapper.ClienteMapper;  
 import com.banco.api.repository.ClienteRepository;  
@@ -24,6 +25,7 @@ public class ClienteService {
   
     @Transactional  
     public ClienteResponseDTO crearCliente(ClienteRequestDTO request) {  
+        validateIdentificacionDisponible(request.getIdentificacion(), null);
         Cliente cliente = clienteMapper.toEntity(request);  
         Cliente saved = clienteRepository.save(cliente);  
         return clienteMapper.toResponseDTO(saved);  
@@ -46,6 +48,7 @@ public class ClienteService {
     public ClienteResponseDTO actualizarCliente(Long id, ClienteRequestDTO request) {  
         Cliente cliente = clienteRepository.findById(id)  
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con ID: " + id));  
+        validateIdentificacionDisponible(request.getIdentificacion(), id);
         clienteMapper.updateEntityFromDTO(request, cliente);  
         Cliente updated = clienteRepository.save(cliente);  
         return clienteMapper.toResponseDTO(updated);  
@@ -57,4 +60,21 @@ public class ClienteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con ID: " + id));  
         clienteRepository.delete(cliente);  
     }  
+
+    private void validateIdentificacionDisponible(String identificacion, Long clienteIdActual) {
+        boolean identificacionOcupada = clienteRepository.existsByIdentificacion(identificacion);
+        if (!identificacionOcupada) {
+            return;
+        }
+
+        if (clienteIdActual != null) {
+            Cliente clienteActual = clienteRepository.findById(clienteIdActual)
+                    .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con ID: " + clienteIdActual));
+            if (identificacion.equals(clienteActual.getIdentificacion())) {
+                return;
+            }
+        }
+
+        throw new DuplicateResourceException("Ya existe un cliente con la identificacion " + identificacion);
+    }
 }

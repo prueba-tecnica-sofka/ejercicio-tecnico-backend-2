@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
 	Optional<Cliente> findByClienteId(Long clienteId);
+
+	boolean existsByIdentificacion(String identificacion);
 }
