@@ -3,142 +3,373 @@
 > Prueba técnica
 > Arquitectura Microservicios
 
-## Indicaciones generales
+## Estado del Proyecto ✅
 
-- Aplique todas las buenas prácticas, patrones Repository, etc que considere necesario
-(se tomará en cuenta este punto para la calificación).
-- El manejo de entidades se debe manejar JPA / Entity Framework Core
-- Se debe manejar mensajes de excepciones.
-- Se debe realizar como mínimo dos pruebas unitarias de los endpoints.
-- La solución se debe desplegar en Docker.
+El proyecto ha sido **completamente implementado** con todas las funcionalidades requeridas.
 
-## Stack
+## Stack Utilizado
 
-- Java Spring Boot
-- PostgreSQL
-- Postman (Validador de la API)
+- **Backend**: Java 17 + Spring Boot 3.5.6
+- **Base de Datos**: PostgreSQL 15
+- **ORM**: JPA/Hibernate
+- **Validación**: Jakarta Validation
+- **Utilidades**: Lombok
+- **Pruebas**: JUnit 5 + Mockito
+- **Contenedorización**: Docker + Docker Compose
+- **Build Tool**: Gradle
 
-## Descripción
+## Indicaciones Implementadas ✓
 
-`Generación de API REST`
+- ✓ Patrones Repository y buenas prácticas aplicadas
+- ✓ Manejo de entidades con JPA/Hibernate
+- ✓ Mensajes de excepciones personalizadas
+- ✓ Pruebas unitarias de endpoints y servicios
+- ✓ Solución desplegable en Docker
 
-Maneja los verbos: GET,POST, PUT, PUSH AND DELETE para cada categoría para las siguientes entidades
+## Descripción del Proyecto
 
-### Persona
+Implementación de una **API REST Bancaria** que maneja operaciones CRUD (GET, POST, PUT, DELETE) para las entidades del sistema bancario.
 
-- Implementar la clase persona con los siguientes datos: nombre, genero, edad,
-identificación, dirección, teléfono
-- Debe manera su clave primaria (PK)
+## Entidades Implementadas
 
-### Cliente
+### 👤 Persona
+- **Atributos**: nombre, genero, edad, identificación, dirección, teléfono
+- **Clave Primaria**: id (Long - auto-generado)
+- **Enumeraciones**: Genero (MASCULINO, FEMENINO)
 
-- Cliente debe manejar una entidad, que herede de la clase persona.
-- Un cliente tiene: clienteid, contraseña, estado.
-- El cliente debe tener una clave única. (PK)
+### 👨‍💼 Cliente
+- **Hereda de**: Persona
+- **Atributos adicionales**: clienteId, contraseña, estado
+- **Clave Única**: clienteId (String - único)
 
-### Cuenta
+### 💳 Cuenta
+- **Atributos**: numeroCuenta, tipoCuenta, saldoInicial, estado, cliente
+- **Clave Única**: numeroCuenta (String)
+- **Enumeraciones**: TipoCuenta (AHORROS, CORRIENTE)
+- **Relación**: Muchas cuentas pertenecen a un cliente
 
-- Cuenta debe manejar una entidad
-- Una cuenta tiene: número cuenta, tipo cuenta, saldo Inicial, estado.
-- Debe manejar su Clave única
+### 📝 Movimiento
+- **Atributos**: fecha, tipoMovimiento, valor, saldo, cuenta
+- **Clave Única**: id (Long - auto-generado)
+- **Enumeraciones**: TipoMovimiento (DEPOSITO, RETIRO)
+- **Relación**: Muchos movimientos pertenecen a una cuenta
 
-### Movimientos
+## Funcionalidades Implementadas
 
-- Movimientos debe manejar una sola entidad
-- Un movimiento tiene: Fecha, tipo movimiento, valor, saldo
-- Debe manejar su Clave única
+### F1 - CRUDs (Crear, Leer, Actualizar, Eliminar)
 
-## Funcionaliddades de la API
+#### Clientes (`/api/clientes`)
+- `POST /api/clientes` - Crear cliente
+- `GET /api/clientes` - Listar todos los clientes
+- `GET /api/clientes/{id}` - Obtener cliente por ID
+- `PUT /api/clientes/{id}` - Actualizar cliente
+- `DELETE /api/clientes/{id}` - Eliminar cliente
 
-Las API deben tener las siguientes operaciones
+#### Cuentas (`/api/cuentas`)
+- `POST /api/cuentas` - Crear cuenta
+- `GET /api/cuentas` - Listar todas las cuentas
+- `GET /api/cuentas/{id}` - Obtener cuenta por ID
+- `PUT /api/cuentas/{id}` - Actualizar cuenta
+- `DELETE /api/cuentas/{id}` - Eliminar cuenta
 
+#### Movimientos (`/api/movimientos`)
+- `POST /api/movimientos` - Registrar movimiento
+- `GET /api/movimientos` - Listar movimientos
+- `GET /api/movimientos/{id}` - Obtener movimiento por ID
+- `PUT /api/movimientos/{id}` - Actualizar movimiento
+- `DELETE /api/movimientos/{id}` - Eliminar movimiento
 
-`F1` Generación de CRUDS (Crear, editar, actualizar y eliminar registros - Entidades: Cliente,
-Cuenta y Movimiento).
+### F2 - Registro de Movimientos
+- ✓ Movimientos con valores positivos (depósitos) o negativos (retiros)
+- ✓ Actualización automática del saldo disponible en la cuenta
+- ✓ Registro completo de transacciones realizadas
 
-Los nombres de los endpoints a generar son:
-    
-- /cuentas
-- /clientes
-- /movimientos
+### F3 - Validación de Saldo
+- ✓ Alerta `"Saldo no disponible"` cuando no hay fondos suficientes
+- ✓ Excepción `SaldoInsuficienteException` personalizada
 
-`F2` Registro de movimientos: al registrar un movimiento en la cuenta se debe tener en cuenta
-lo siguiente:
+### F4 - Reportes
+- `GET /api/reportes/movimientos` - Listar movimientos por cliente y fecha
+- Respuesta incluye: cliente, número de cuenta, tipo de cuenta, movimiento, saldo disponible
 
-- Para un movimiento se pueden tener valores positivos o negativos.
-- Al realizar un movimiento se debe actualizar el saldo disponible.
-- Se debe llevar el registro de las transacciones realizadas
+## Componentes Implementados
 
-`F3` Registro de movimientos: Al realizar un movimiento el cual no cuente con saldo, debe
-alertar mediante el siguiente mensaje “Saldo no disponible”
+### Entities (src/main/java/com/banco/api/entity/)
+- `Persona.java` - Clase base con atributos comunes
+- `Cliente.java` - Hereda de Persona
+- `Cuenta.java` - Entidad de cuentas bancarias
+- `Movimiento.java` - Entidad de movimientos
+- `Genero.java` - Enum para género
+- `TipoCuenta.java` - Enum para tipo de cuenta
+- `TipoMovimiento.java` - Enum para tipo de movimiento
 
-## Casos de uso (ejemplos)
+### Controllers (src/main/java/com/banco/api/controller/)
+- `ClienteController.java` - Controlador de clientes
+- `CuentaController.java` - Controlador de cuentas
+- `MovimientoController.java` - Controlador de movimientos
+- `ReporteController.java` - Controlador de reportes
 
-1. Creación de Usuarios
+### Services (src/main/java/com/banco/api/service/)
+- `ClienteService.java` - Lógica de negocio de clientes
+- `CuentaService.java` - Lógica de negocio de cuentas
+- `MovimientoService.java` - Lógica de negocio de movimientos
+- `ReporteService.java` - Lógica de reportes
 
-| **Nombres**          | **Dirección**          | **Teléfono** | **Contraseña** | **estado** |
-|----------------------|------------------------|--------------|----------------|------------|
-| Jose Lema            | Otavalo sn y principal | 098254785    | 1234           | true       |
-| Marianela Montalvo   | Otavalo sn y principal | 098254785    | 5678           | true       |
-| Juan Osorio          | Otavalo sn y principal | 098254785    | 1245           | true       |
+### Repositories (src/main/java/com/banco/api/repository/)
+- `ClienteRepository.java` - Acceso a datos de clientes
+- `CuentaRepository.java` - Acceso a datos de cuentas
+- `MovimientoRepository.java` - Acceso a datos de movimientos
 
-2. Creación de cuentas de usuario
+### DTOs (src/main/java/com/banco/api/dto/)
+- Request DTOs: Para recibir datos del cliente
+- Response DTOs: Para enviar datos al cliente
 
-| **Numero cuenta**    | **Tipo**    | **Saldo inicial** | **Estado**     | **Cliente**               |
-|----------------------|-------------|-------------------|----------------|---------------------------|
-| 478758               | Ahorros     | 2000              | true           | Jose Lema                 |
-| 225487               | Corriente   | 100               | true           | Marianela Montalvo        |
-| 495878               | Ahorros     | 0                 | true           | Juan Osorio               |
-| 496825               | Ahorros     | 540               | true           | Marianela Montalvo        |
+### Exception Handling (src/main/java/com/banco/api/exception/)
+- `GlobalExceptionHandler.java` - Manejo global de excepciones
+- `SaldoInsuficienteException.java` - Excepción para saldo insuficiente
+- `ResourceNotFoundException.java` - Excepción para recurso no encontrado
+- `DuplicateResourceException.java` - Excepción para recursos duplicados
+- `ErrorResponse.java` - Estructura de respuesta de error
 
-3. Crea una nueva cuenta corrienta para `Jose Lema`
+### Mappers (src/main/java/com/banco/api/mapper/)
+- `ClienteMapper.java` - Mapeo Cliente <-> DTOs
+- `CuentaMapper.java` - Mapeo Cuenta <-> DTOs
+- `MovimientoMapper.java` - Mapeo Movimiento <-> DTOs
 
-| **Numero cuenta**    | **Tipo**    | **Saldo inicial** | **Estado**     | **Cliente**               |
-|----------------------|-------------|-------------------|----------------|---------------------------|
-| 585545               | Corriente   | 1000              | true           | Jose Lema                 |
+## Pruebas Implementadas
 
-4. Realizar los siguientes movimientos
+### Unit Tests (src/test/java/com/banco/api/)
+- `ClienteServiceTest.java` - Pruebas del servicio de clientes
+- `MovimientoServiceTest.java` - Pruebas del servicio de movimientos
+- `MovimientoControllerTest.java` - Pruebas del controlador de movimientos
+- `RepositoryTest.java` - Pruebas de repositorios
 
-| Número Cuenta | Tipo      | Saldo Inicial  | Estado    | Movimiento     |
-|---------------|-----------|----------------|---------|------------------|
-| 478758        | Ahorro    | 2000           | True    | Retiro de 575    |
-| 225487        | Corriente | 100            | True    | Deposito de 600  |
-| 495878        | Ahorros   | 0              | True    | Deposito de 150  |
-| 496825        | Ahorros   | 540            | True    | Retiro de 540    |
+## Configuración
 
+### application.yml
+```yaml
+spring:
+  application:
+    name: api-bancaria
+  datasource:
+    url: jdbc:postgresql://localhost:5433/banco_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
 
-5. Listado de Movimiento, por fechas x usuario
+server:
+  port: 3000
+```
 
-| Fecha     | Cliente            | Número Cuenta | Tipo      | Saldo Inicial  | Estado  | Movimiento  | Saldo Disponible  |
-|-----------|--------------------|---------------|-----------|----------------|---------|-------------|-------------------|
-| 10/2/2022 | Marianela Montalvo | 225487        | Corriente | 100            | True    | 600         | 700               |
-| 8/2/2022  | Marianela Montalvo | 496825        | Ahorros   | 540            | True    | -540        | 0                 |
+## Instrucciones de Ejecución
 
-Ejemplo json
+### Prerequisitos
+- Docker y Docker Compose instalados
+- Git instalado
+- (Opcional) Java 17 y Gradle para desarrollo local
+
+### Opción 1: Ejecutar con Docker Compose (Recomendado)
+
+1. **Clonar el repositorio**
+```bash
+git clone https://github.com/tu-usuario/ejercicio-tecnico-backend-2.git
+cd ejercicio-tecnico-backend-2
+```
+
+2. **Ejecutar con Docker Compose**
+```bash
+docker-compose up -d
+```
+
+3. **Verificar que los servicios están corriendo**
+```bash
+docker-compose ps
+```
+
+4. **Acceder a la API**
+```
+http://localhost:3000/api/clientes
+http://localhost:3000/api/cuentas
+http://localhost:3000/api/movimientos
+```
+
+### Opción 2: Ejecutar Localmente (Desarrollo)
+
+1. **Requisitos**
+   - Java 17 JDK
+   - PostgreSQL 15 corriendo en puerto 5433
+   - Gradle (opcional, el proyecto incluye gradlew)
+
+2. **Crear la base de datos**
+```bash
+psql -U postgres -h localhost -p 5433 -f docker/postgres/init/BaseDeDatos.sql
+```
+
+3. **Compilar el proyecto**
+```bash
+./gradlew clean build -x test
+```
+
+4. **Ejecutar la aplicación**
+```bash
+./gradlew bootRun
+```
+
+5. **La API estará disponible en**
+```
+http://localhost:3000
+```
+
+## Testing
+
+### Ejecutar todas las pruebas
+```bash
+./gradlew test
+```
+
+### Ejecutar pruebas específicas
+```bash
+./gradlew test --tests ClienteServiceTest
+./gradlew test --tests MovimientoControllerTest
+```
+
+## Casos de Uso (Ejemplos)
+
+### 1. Crear un Cliente
+```bash
+curl -X POST http://localhost:3000/api/clientes \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Jose Lema",
+    "genero": "MASCULINO",
+    "edad": 28,
+    "identificacion": "12345678",
+    "direccion": "Otavalo sn y principal",
+    "telefono": "098254785",
+    "clienteId": "jose123",
+    "contrasena": "1234",
+    "estado": true
+  }'
+```
+
+### 2. Crear una Cuenta
+```bash
+curl -X POST http://localhost:3000/api/cuentas \
+  -H "Content-Type: application/json" \
+  -d '{
+    "numeroCuenta": "478758",
+    "tipoCuenta": "AHORROS",
+    "saldoInicial": 2000,
+    "estado": true,
+    "clienteId": 1
+  }'
+```
+
+### 3. Registrar un Movimiento
+```bash
+curl -X POST http://localhost:3000/api/movimientos \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tipoMovimiento": "RETIRO",
+    "valor": 575,
+    "cuentaId": 1
+  }'
+```
+
+### 4. Listar Movimientos por Cliente
+```bash
+curl http://localhost:3000/api/reportes/movimientos
+```
+
+## Estructura de Respuesta de Error
 
 ```json
 {
-"Fecha":"10/2/2022",
-"Cliente":"Marianela Montalvo",
-"Numero Cuenta":"225487"
-"Tipo":"Corriente",
-"Saldo Inicial":100,
-"Estado":true,
-"Movimiento":600,
-"Saldo Disponible":700
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Saldo no disponible",
+  "path": "/api/movimientos"
 }
 ```
 
-## Instrucciones de despliegue
+## Base de Datos
 
-- Generar el script de base datos, entidades y esquema datos, con el nombre
-BaseDatos.sql.
-- Ejecutar Postman para poder realizar las verificaciones (http://{servidor}:{puerto}/api/{metodo}...{Parámetros}) 
+### Script SQL (docker/postgres/init/BaseDeDatos.sql)
+- Crea tablas con constraints adecuados
+- Define relaciones entre entidades
+- Inicializa datos de prueba
 
-## Despliegue
+### Configuración Hibernate
+- ddl-auto: validate (no modifica esquema en producción)
+- Dialect: PostgreSQL
+- Show SQL: true (para debugging)
 
-- La Solución debe ser cargado a un repositorio Git público, se debe enviar la ruta de
-este repositorio.
-- Descarga archivo Json, de Aplicación Postman, para validación de los endpoints.
-- Se debe entregar antes de la fecha y hora indicada por correo.
+## Logs
 
+Los logs se escriben en:
+- Consola (nivel DEBUG para com.banco.api)
+- Archivo: `logs/` (si se configura)
+
+## Estructura del Proyecto
+
+```
+.
+├── src/
+│   ├── main/
+│   │   ├── java/com/banco/api/
+│   │   │   ├── config/
+│   │   │   ├── controller/
+│   │   │   ├── dto/
+│   │   │   ├── entity/
+│   │   │   ├── exception/
+│   │   │   ├── mapper/
+│   │   │   ├── repository/
+│   │   │   └── service/
+│   │   └── resources/
+│   │       └── application.yml
+│   └── test/
+│       └── java/com/banco/api/
+├── docker/
+│   └── postgres/
+│       └── init/
+│           └── BaseDeDatos.sql
+├── Dockerfile
+├── docker-compose.yml
+├── build.gradle
+└── README.md
+```
+
+## Solución de Problemas
+
+### Puerto 3000 ya en uso
+```bash
+# Cambiar puerto en docker-compose.yml o application.yml
+```
+
+### Conexión a PostgreSQL falla
+```bash
+# Verificar que PostgreSQL está corriendo
+docker-compose ps postgres
+
+# Ver logs de PostgreSQL
+docker-compose logs postgres
+```
+
+### Limpiar todo y reiniciar
+```bash
+docker-compose down -v
+docker-compose up -d
+```
+
+## Contacto y Soporte
+
+Para reportar issues o preguntas, crear un issue en el repositorio.
+
+---
+
+**Última actualización**: Mayo 2024
+**Versión**: 1.0.0
