@@ -371,5 +371,5 @@ Para reportar issues o preguntas, crear un issue en el repositorio.
 
 ---
 
-**Última actualización**: Mayo 2024
+**Última actualización**: Mayo 2026
 **Versión**: 1.0.0
