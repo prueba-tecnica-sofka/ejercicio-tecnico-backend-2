@@ -892,7 +892,7 @@ WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080
+EXPOSE 3000
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
@@ -934,7 +934,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     ports:
-      - "8080:8080"
+      - "3000:3000"
     networks:
       - banco-network
     restart: unless-stopped
