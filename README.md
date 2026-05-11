@@ -92,6 +92,11 @@ Implementación de una **API REST Bancaria** que maneja operaciones CRUD (GET, P
 - `GET /api/reportes/movimientos` - Listar movimientos por cliente y fecha
 - Respuesta incluye: cliente, número de cuenta, tipo de cuenta, movimiento, saldo disponible
 
+### F5 - Pruebas unitarias: Implementar 1 prueba unitaria para la entidad de dominio Cliente.
+
+Pruebas unitarias disponibles en la carpeta `unit-test` en su registro gráfico y en el documento 
+[plan-pruebas-unitarias.md]()
+
 ## Componentes Implementados
 
 ### Entities (src/main/java/com/banco/api/entity/)
