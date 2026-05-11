@@ -95,7 +95,12 @@ Implementación de una **API REST Bancaria** que maneja operaciones CRUD (GET, P
 ### F5 - Pruebas unitarias: Implementar 1 prueba unitaria para la entidad de dominio Cliente.
 
 Pruebas unitarias disponibles en la carpeta `unit-test` en su registro gráfico y en el documento 
-[plan-pruebas-unitarias.md]()
+
+[plan-pruebas-unitarias.md](plan-pruebas-unitarias.md)
+
+### F7 - Despliegue de la solución en contenedores
+
+El proyecto se encuentra dockerizado y con instrucciones de dockerizado más adelante
 
 ## Componentes Implementados
 
